@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paragon</title>
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+    <header>
+        <hr>
+        <h1 id="header">PARAGON</h1>
+        <hr>
+    </header>
+    <section>
+        <table id="receiptTable" class="table">
+            <thead>
+                <tr>
+                    <th scope="col">LP</th>
+                    <th scope="col">NAZWA</th>
+                    <th scope="col">ILOŚĆ</th>
+                    <th scope="col">CENA</th>
+                    <th scope="col">SUMA</th>
+                    <th scope="col">RUCH</th>
+                    <th scope="col">AKCJA</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="sumRow">
+                    <td colspan="7"><b>RAZEM: <span id="totalPrice">0 zł</span></b></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- <h4 id="newItemHeader">NOWA POZYCJA</h4>
+        <form onsubmit="event.preventDefault();onFormSubmit()">
+            <div class="form-row align-items-center">
+                <div class="col-auto">
+                    <input id="productName" class="form-control" type="text" placeholder="Nazwa" maxlength="25">
+                </div>
+                <div class="col-auto">
+                    <input id="productQuantity" class="form-control" type="number" min="0" step="0.01"
+                        placeholder="Ilość">
+                </div>
+                <div class="col-auto">
+                    <input id="productPrice" class="form-control" type="number" min="0" step="0.01" placeholder="Cena">
+                </div>
+                <div class="col-auto">
+                    <button id="addButton" type="submit" class="btn btn-success">DODAJ</button>
+                </div>
+            </div>
+            </table>
+        </form>
+    </section>
+    <script src="script.js" type="text/javascript"></script> -->
+
+        <h4 id="newItemHeader">NOWA POZYCJA</h4>
+        <form class="needs-validation" novalidate>
+            <div class="form-row align-items-center">
+                <div class="col-auto">
+                    <input id="productName" class="form-control" type="text" placeholder="Nazwa" maxlength="25"
+                        required>
+                    <!-- <div class="valid-tooltip">
+                        OK
+                    </div> -->
+                    <div class="invalid-tooltip">
+                        Błędne dane
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <!-- https://stackoverflow.com/questions/19011861/is-there-a-float-input-type-in-html5 -->
+                    <input id="productQuantity" class="form-control" type="number" min="0" step="0.01"
+                        placeholder="Ilość" required>
+                    <!-- <div class="valid-tooltip">
+                        OK
+                    </div> -->
+                    <div class="invalid-tooltip">
+                        Błędne dane
+                    </div>
+                    <!-- <div class="valid-feedback">
+                        OK
+                    </div>
+                    <div class="invalid-feedback">
+                        Błędne dane
+                    </div> -->
+                </div>
+                <div class="col-auto">
+                    <input id="productPrice" class="form-control" type="number" min="0" step="0.01" placeholder="Cena"
+                        required>
+                    <!-- <div class="valid-tooltip">
+                        OK
+                    </div> -->
+                    <div class="invalid-tooltip">
+                        Błędne dane
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <button id="addButton" type="submit" class="btn btn-success">DODAJ</button>
+                </div>
+            </div>
+            </table>
+        </form>
+    </section>
+    <script src="script.js" type="text/javascript"></script>
+</body>
+
+</html>
