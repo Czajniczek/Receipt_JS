@@ -120,11 +120,11 @@ class Receipt {
         let row = button.parentElement.parentElement //button => td => tr
         let rowIndex = row.rowIndex - 1 //Numer wiersza jak w tablicy
         let previousSum = parseFloat(row.cells[4].innerHTML)
-        
+
         let name = document.getElementById("editName").value
-        let quantity = document.getElementById("editQuantity").value
-        let price = document.getElementById("editPrice").value
-        let newSum = quantity * price
+        let quantity = Math.round(document.getElementById("editQuantity").value * 100) / 100
+        let price = Math.round(document.getElementById("editPrice").value * 100) / 100
+        let newSum = Math.round(quantity * price * 100) / 100
 
         row.cells[1].innerHTML = name
         row.cells[2].innerHTML = quantity
