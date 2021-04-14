@@ -1,8 +1,7 @@
-let products = []
 document.body.onload = function () {
     if (localStorage.receipt) {
-        products = JSON.parse(localStorage.receipt)
-        console.log(products)
+        let products = JSON.parse(localStorage.receipt)
+        //console.log(products)
 
         for (let p of products.products) {
             receipt.addProduct(p)
@@ -22,19 +21,13 @@ class Product {
 class Receipt {
     constructor() {
         this.products = []
-        //this.id = 0
         this.total = 0
     }
 
     addProduct(product) {
         this.products.push(product)
-        //console.log(`Wszystkie produkty:`)
-        //console.log(this.products)
-        //console.table(this.products)
 
         let table = document.getElementById("receiptTable").getElementsByTagName("tbody")[0]
-        //console.log(table)
-
         let newRow = table.insertRow(table.childElementCount - 1)
 
         let cell0 = newRow.insertCell(0)
@@ -61,120 +54,97 @@ class Receipt {
         <button id="deleteButton" class="btn btn-outline-danger btn-sm" type="button" onClick="deleteProduct(this)">USUŃ</button>`
 
         this.totalPrice(product.sum)
-
-
         this.resetForm()
     }
 
     totalPrice(productPrice) {
-        //this.total += productPrice
-
         document.getElementById("totalPrice").innerHTML = (Math.round((this.total += productPrice) * 100) / 100) + " zł"
-        //sumAll.textContent = this.total + " zł"
     }
 
     resetForm() {
         let name = document.getElementById("productName")
         name.value = null
-        //document.getElementById("productName").value = null
         document.getElementById("productQuantity").value = null
         document.getElementById("productPrice").value = null
-
-        selectedRow = null
 
         name.focus()
     }
 
-    up(td) {
+    up(button) {
         let table = document.getElementById("receiptTable").getElementsByTagName("tbody")[0]
         //console.log(table)
-
         let rows = table.rows
         //console.log(rows)
-
-        // let currentRow = td.parentElement.parentElement //tbody
+        let row = button.parentElement.parentElement //button => td => tr
         // console.log(row)
+        let rowIndex = row.rowIndex - 1 //Numer wiersza jak w tablicy
+        //console.log(rowIndex)
 
-        let currentRowIndex = td.parentElement.parentElement.rowIndex - 1
-        //console.log(currentRowIndex)
-
-        if (currentRowIndex > 0) {
-            table.insertBefore(rows[currentRowIndex], rows[currentRowIndex - 1]) //Nowszy, nowy
-            this.products.splice(currentRowIndex - 1, 0, this.products.splice(currentRowIndex, 1)[0])
+        if (rowIndex > 0) {
+            table.insertBefore(rows[rowIndex], rows[rowIndex - 1]) //Nowszy, nowy
+            //https://stackoverflow.com/questions/2440700/reordering-arrays/2440723
+            this.products.splice(rowIndex - 1, 0, this.products.splice(rowIndex, 1)[0]) //Zmiana kolejności w tablicy
         }
 
         this.updateLP()
-
-        console.log(`UP:`)
-        console.log(this.products)
+        // console.log(`UP:`)
+        // console.log(this.products)
     }
 
-    down(td) {
+    down(button) {
         let table = document.getElementById("receiptTable").getElementsByTagName("tbody")[0]
         let rows = table.rows
-        let currentRowIndex = td.parentElement.parentElement.rowIndex - 1
+        let row = button.parentElement.parentElement //button => td => tr
+        let rowIndex = row.rowIndex - 1 //Numer wiersza jak w tablicy
 
-        if (currentRowIndex < this.products.length - 1) {
-            table.insertBefore(rows[currentRowIndex + 1], rows[currentRowIndex]) //Nowszy, nowy
+        if (rowIndex < this.products.length - 1) {
+            table.insertBefore(rows[rowIndex + 1], rows[rowIndex]) //Nowszy, nowy
             //https://stackoverflow.com/questions/2440700/reordering-arrays/2440723
-            this.products.splice(currentRowIndex + 1, 0, this.products.splice(currentRowIndex, 1)[0])
+            this.products.splice(rowIndex + 1, 0, this.products.splice(rowIndex, 1)[0]) //Zmiana kolejności w tablicy
         }
 
         this.updateLP()
-
-        console.log(`DOWN:`)
-        console.log(this.products)
-        console.table(this.products)
     }
 
-    editProduct(td) {
-        let row = td.parentElement.parentElement
+    editProduct(button) {
+        let row = button.parentElement.parentElement //button => td => tr
 
-        // for (let i = 1; i < 5; i++) {
-        //     row.cells[i].innerHTML = `<input id="editValue" value="${parseFloat(row.cells[i].innerHTML)}" required>`
-        // }
-
-        row.cells[1].innerHTML = `<input id="editName" value="${row.cells[1].innerHTML}" maxlength="25" type="text" required>`
-        row.cells[2].innerHTML = `<input id="editQuantity" value="${parseFloat(row.cells[2].innerHTML)}" type="number" min="0" step="0.01" required>`
-        row.cells[3].innerHTML = `<input id="editPrice" value="${parseFloat(row.cells[3].innerHTML)}" type="number" min="0" step="0.01" required>`
+        row.cells[1].innerHTML = `<input id="editName" class="form-control" type="text" value="${row.cells[1].innerHTML}" maxlength="25" required>`
+        row.cells[2].innerHTML = `<input id="editQuantity" class="form-control" type="number" min="0" step="0.01" value="${parseFloat(row.cells[2].innerHTML)}" required>`
+        row.cells[3].innerHTML = `<input id="editPrice" class="form-control" type="number" min="0" step="0.01" value="${parseFloat(row.cells[3].innerHTML)}" required>`
 
         row.cells[6].innerHTML = `<button id="saveButton" class="btn btn-outline-success btn-sm" type="button" onClick="saveProduct(this)">ZAPISZ</button>`
     }
 
-    saveProduct(td) {
-
-        let row = td.parentElement.parentElement
-        console.log(row)
-        let rowIndex = row.rowIndex - 1
-
-        this.totalPrice(-parseFloat(row.cells[4].innerHTML))
+    saveProduct(button) {
+        let row = button.parentElement.parentElement //button => td => tr
+        let rowIndex = row.rowIndex - 1 //Numer wiersza jak w tablicy
+        let previousSum = parseFloat(row.cells[4].innerHTML)
+        
         let name = document.getElementById("editName").value
         let quantity = document.getElementById("editQuantity").value
         let price = document.getElementById("editPrice").value
+        let newSum = quantity * price
 
         row.cells[1].innerHTML = name
         row.cells[2].innerHTML = quantity
-        row.cells[3].innerHTML = price + "zł"
-        let sum = quantity*price
-
-        row.cells[4].innerHTML = sum + "zł"
-
+        row.cells[3].innerHTML = price + " zł"
+        row.cells[4].innerHTML = newSum + " zł"
         row.cells[6].innerHTML = `<button id="editButton" class="btn btn-outline-warning btn-sm" type="button" onClick="editProduct(this)">EDYTUJ</button>
         <button id="deleteButton" class="btn btn-outline-danger btn-sm" type="button" onClick="deleteProduct(this)">USUŃ</button>`
 
-        this.totalPrice(sum)
+        this.totalPrice(newSum - previousSum)
 
         this.products[rowIndex].name = name
         this.products[rowIndex].quantity = quantity
         this.products[rowIndex].price = price
-        this.products[rowIndex].sum = sum
+        this.products[rowIndex].sum = newSum
     }
 
-    deleteProduct(td) {
+    deleteProduct(button) {
         if (confirm("Czy na pewno chcesz usunąć wybrany produkt?")) {
             //console.log(td) //Button
-            let row = td.parentElement.parentElement //button => td => tr
-            //console.log(`Numer wiersza (naturalnie): ${row.rowIndex}`) //Naturalnie
+            let row = button.parentElement.parentElement //button => td => tr
             let rowIndex = row.rowIndex - 1 //Numer wiersza jak w tablicy
             let productFullPrice = parseFloat(row.cells[4].innerHTML)
             this.totalPrice(-productFullPrice)
@@ -185,7 +155,6 @@ class Receipt {
             //console.log(this.products)
 
             this.updateLP()
-
             this.resetForm()
         }
     }
@@ -202,8 +171,6 @@ class Receipt {
 
 let receipt = new Receipt()
 
-let selectedRow = null
-
 function readFormData() {
     let name = document.getElementById("productName").value
     let quantity = document.getElementById("productQuantity").value
@@ -215,28 +182,28 @@ function readFormData() {
     return product
 }
 
-function up(td) {
-    receipt.up(td)
+function up(button) {
+    receipt.up(button)
     localStorage.setItem("receipt", JSON.stringify(receipt))
 }
 
-function down(td) {
-    receipt.down(td)
+function down(button) {
+    receipt.down(button)
     localStorage.setItem("receipt", JSON.stringify(receipt))
 }
 
-function editProduct(td) {
-    receipt.editProduct(td)
+function editProduct(button) {
+    receipt.editProduct(button)
     localStorage.setItem("receipt", JSON.stringify(receipt))
 }
 
-function saveProduct(td) {
-    receipt.saveProduct(td)
+function saveProduct(button) {
+    receipt.saveProduct(button)
     localStorage.setItem("receipt", JSON.stringify(receipt))
 }
 
-function deleteProduct(td) {
-    receipt.deleteProduct(td)
+function deleteProduct(button) {
+    receipt.deleteProduct(button)
     localStorage.setItem("receipt", JSON.stringify(receipt))
 }
 
@@ -255,19 +222,12 @@ function deleteProduct(td) {
                 if (!form.checkValidity()) {
                     //https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault
                     event.preventDefault()
-                    event.stopPropagation()
+                    event.stopPropagation() //The preventDefault() method does not prevent further propagation of an event through the DOM. Use the stopPropagation() method to handle this.
                     form.classList.add('was-validated')
-                }
-                else {
+                } else {
                     event.preventDefault()
-                    let formData = readFormData()
-
-                    if (selectedRow == null) {
-                        receipt.addProduct(formData)
-                        localStorage.setItem("receipt", JSON.stringify(receipt))
-                    }
-                    //else { }
-
+                    receipt.addProduct(readFormData())
+                    localStorage.setItem("receipt", JSON.stringify(receipt))
                     form.classList.remove('was-validated')
                 }
             }, false)

@@ -41,7 +41,10 @@ table
 
 #editName, #editQuantity, #editPrice
 {
-    width: 80px; 
+    width: 100px; 
+    height: 30px;
+    margin-left: auto;
+    margin-right: auto;
     text-align: center;
 }
 
