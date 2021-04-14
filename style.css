@@ -1,0 +1,64 @@
+header, section
+{
+    width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+form
+{
+    display: inline-block;
+    margin-top: 10px;
+}
+
+table
+{
+    margin-top: 40px;
+    text-align: center;
+}
+
+#upArrow
+{
+    margin: 0;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+#downArrow
+{
+    margin: 0;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+#editButton
+{
+    margin: 0;
+    padding: 3px;
+    margin-right: 5px;
+}
+
+#editName, #editQuantity, #editPrice
+{
+    width: 80px; 
+    text-align: center;
+}
+
+#deleteButton
+{
+    margin: 0;
+    padding: 3px;
+    margin-left: 5px;
+}
+
+#saveButton
+{
+    margin: 0;
+    padding: 3px;
+}
+
+#newItemHeader
+{
+    margin-top: 60px;
+}
