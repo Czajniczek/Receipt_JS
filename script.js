@@ -27,7 +27,12 @@ class Receipt {
     addProduct(product) {
         this.products.push(product)
 
+        // let table0 = document.getElementById("receiptTable").getElementsByTagName("tbody")//HTML collection
+        // console.log(table0)
+
         let table = document.getElementById("receiptTable").getElementsByTagName("tbody")[0]
+        console.log(table)
+
         let newRow = table.insertRow(table.childElementCount - 1)
 
         let cell0 = newRow.insertCell(0)
@@ -106,6 +111,15 @@ class Receipt {
         this.updateLP()
     }
 
+    updateLP() {
+        let table = document.getElementById("receiptTable").getElementsByTagName("tbody")[0]
+        let lp = 0
+
+        for (let i = 0; i < this.products.length; i++) {
+            table.children[i].cells[0].innerHTML = ++lp
+        }
+    }
+
     editProduct(button) {
         let row = button.parentElement.parentElement //button => td => tr
 
@@ -143,7 +157,6 @@ class Receipt {
 
     deleteProduct(button) {
         if (confirm("Czy na pewno chcesz usunąć wybrany produkt?")) {
-            //console.log(td) //Button
             let row = button.parentElement.parentElement //button => td => tr
             let rowIndex = row.rowIndex - 1 //Numer wiersza jak w tablicy
             let productFullPrice = parseFloat(row.cells[4].innerHTML)
@@ -156,15 +169,6 @@ class Receipt {
 
             this.updateLP()
             this.resetForm()
-        }
-    }
-
-    updateLP() {
-        let table = document.getElementById("receiptTable").getElementsByTagName("tbody")[0]
-        let lp = 0
-
-        for (let i = 0; i < this.products.length; i++) {
-            table.children[i].cells[0].innerHTML = ++lp
         }
     }
 }
@@ -219,13 +223,13 @@ function deleteProduct(button) {
         .forEach(function (form) {
             //https://developer.mozilla.org/pl/docs/Web/API/EventTarget/addEventListener
             form.addEventListener('submit', function (event) {
+                //https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault
+                event.preventDefault()
+                
                 if (!form.checkValidity()) {
-                    //https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault
-                    event.preventDefault()
                     event.stopPropagation() //The preventDefault() method does not prevent further propagation of an event through the DOM. Use the stopPropagation() method to handle this.
                     form.classList.add('was-validated')
                 } else {
-                    event.preventDefault()
                     receipt.addProduct(readFormData())
                     localStorage.setItem("receipt", JSON.stringify(receipt))
                     form.classList.remove('was-validated')
